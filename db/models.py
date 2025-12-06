@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
-import settings
+from django.conf import settings
 
 
 class Genre(models.Model):
@@ -86,9 +86,9 @@ class Ticket(models.Model):
         ]
 
     def __str__(self) -> str:
-        return (f"{self.movie_session.movie.title} "
-                f"{self.movie_session.show_time}"
-                f" (row: {self.row}, seat: {self.seat})")
+        return (
+            f"{self.movie_session.movie.title} {self.movie_session.show_time} "
+            f"(row: {self.row}, seat: {self.seat})")
 
     def clean(self) -> None:
         max_rows = self.movie_session.cinema_hall.rows
