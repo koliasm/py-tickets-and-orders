@@ -12,11 +12,11 @@ def create_user(
     user = get_user_model().objects.create_user(
         username=username, password=password)
 
-    if email:
+    if email is not None:
         user.email = email
-    if first_name:
+    if first_name is not None:
         user.first_name = first_name
-    if last_name:
+    if last_name is not None:
         user.last_name = last_name
     user.save()
 
@@ -37,15 +37,15 @@ def update_user(
 ) -> AbstractUser:
     user = get_user(user_id)
 
-    if username:
+    if username is not None:
         user.username = username
-    if password:
+    if password is not None:
         user.set_password(password)
-    if email:
+    if email is not None:
         user.email = email
-    if first_name:
+    if first_name is not None:
         user.first_name = first_name
-    if last_name:
+    if last_name is not None:
         user.last_name = last_name
     user.save()
 
