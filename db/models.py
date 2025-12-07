@@ -65,7 +65,7 @@ class Order(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        return f"{self.created_at}"
+        return f"<Order: {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}>"
 
 
 class Ticket(models.Model):
@@ -87,8 +87,8 @@ class Ticket(models.Model):
 
     def __str__(self) -> str:
         return (
-            f"{self.movie_session.movie.title} {self.movie_session.show_time} "
-            f"(row: {self.row}, seat: {self.seat})")
+            f"<Ticket: {self.movie_session.movie.title} {self.movie_session.show_time} "
+            f"(row: {self.row}, seat: {self.seat})>")
 
     def clean(self) -> None:
         max_rows = self.movie_session.cinema_hall.rows
@@ -96,12 +96,22 @@ class Ticket(models.Model):
 
         if not (1 <= self.row <= max_rows):
             raise ValidationError(
-                {"row": f"row number must be in available "
-                        f"range: (1, rows): (1, {max_rows})"})
+                {
+                    "row": [
+                        f"row number must be in available range: "
+                        f"(1, rows): (1, {max_rows})"
+                    ]
+                }
+            )
         if not (1 <= self.seat <= max_seats):
             raise ValidationError(
-                {"seat": f"seat number must be in available "
-                         f"range: (1, seats_in_row): (1, {max_seats})"})
+                {
+                    "seat": [
+                        f"seat number must be in available range: "
+                        f"(1, seats_in_row): (1, {max_seats})"
+                    ]
+                }
+            )
 
     def save(self, *args, **kwargs) -> None:
         self.full_clean()
